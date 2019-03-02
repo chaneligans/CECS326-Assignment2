@@ -27,7 +27,7 @@ int main()
    {
       long mtype;        // required
       char greeting[50]; // mesg content
-      pid_t pid;         // pid of sender
+      int number;         // random number
    };
 
    buf msg;
@@ -41,8 +41,10 @@ int main()
    //Message counter
    int counter = 0;
 
-   //pid of B
+   //Gets the pid of B
    pid_t pidB;
+   msgrcv(qid, (struct msgbuf *)&msg, size, 100, 0);
+   pidB = msg.number;
 
    while (endA == false && endB == false && endC == false)
    {
@@ -51,25 +53,22 @@ int main()
       //Check if the message from Probe A
       if (msg.greeting == "A" || msg.greeting == "EndA")
       {
-         cout << "Probe A sends a message to Hub" << endl;
-         aCounter += 1;
+         cout << "Probe A sends a message to Hub: "<< msg.number << endl;
          if (msg.greeting == "EndA")
          {
             cout << "Probe A exits" << endl;
             endA = true;
          } // Probe A has been terminated
          msg.mtype = 15;
+         msg.number = 0;
          strncpy(msg.greeting, "Hub replies", size);
          cout << "Hub sends a message to A: " << msg.greeting << endl;
          msgsnd(qid, (struct msgbuf *)&msg, size, 0);
       }
 
-      if(msg.greeting == "B"){
-         pidB = msg.pid;
-      }
       if (counter == 10000)
       {
-         force_patch(msg.pid) // Force_path file
+         force_patch(pidB) // Force_path file
              endB = true;
       } // Force B to exit
       if (msg.greeting == "EndC")
