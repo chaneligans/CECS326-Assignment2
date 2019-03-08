@@ -22,13 +22,12 @@ using namespace std;
 // declare my message buffer
 struct buf {
     long mtype; // required
-    char greeting[50]; // msg content
+    char greeting[5]; // msg content
     int randInt;
 }; buf msg;
 
 void sendMsg(buf msg, int qid, int size){
     msg.mtype = 13;
-    strcpy(msg.greeting, "C");
     msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 }
 
@@ -40,7 +39,8 @@ int main() {
     int size = sizeof(msg)-sizeof(long);
     
     msg.mtype = 13;
-    strcpy(msg.greeting, "Probe C: EXIT");
+    strncpy(msg.greeting, "C", size);
+    strncpy(msg.greeting, "EndC", size);
     
     kill_patch(qid, &msg, size, 13);
     
@@ -57,4 +57,3 @@ int main() {
     
     exit(0);
 }
-
