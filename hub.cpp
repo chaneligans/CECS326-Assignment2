@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <cstdlib>
-#include <force_patch.h>
+#include "force_patch.h"
 using namespace std;
 
 int main()
@@ -68,8 +68,8 @@ int main()
 
       if (counter == 10000)
       {
-         force_patch(pidB) // Force_path file
-             endB = true;
+         force_patch(pidB); // Force_path file
+         endB = true;
       } // Force B to exit
       if (msg.greeting == "EndC")
       {
