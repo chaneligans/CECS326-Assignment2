@@ -23,7 +23,8 @@ int main() {
     // declare my message buffer
 	struct buf {
 		long mtype; // required
-		char greeting[50]; // mesg content
+		char greeting[5]; // mesg content
+        int randInt;
 	};
 
 	// seed the rng
@@ -46,7 +47,8 @@ int main() {
     // continue looping until the rand number is less than 100
     while (randNum >= 100) {
         if (randNum % probeA == 0) {
-            strcpy(msg.greeting, "Probe A" + randNum);
+            strncpy(msg.greeting, "A",size);
+            msg.randInt = randNum;
             // send msg
 	        msgsnd(qid, (struct msgbuf *)&msg, size, 0);
             
@@ -59,6 +61,11 @@ int main() {
         }
         randNum = rand();
     }
+
+    //Notify Hub that probe A ending
+    strncpy(msg.greeting, "EndA",size);
+    msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+    cout << "Probe A is terminating"<< endl;
 	exit(0);
 }
 
