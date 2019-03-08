@@ -1,8 +1,8 @@
 //
-//  ProbeC.cpp
-//  CECS326_Assignment#2
+//  main.cpp
+//  Probe_C
 //
-//  Created by Sadiq Sarwar on 2/28/19.
+//  Created by Sadiq Sarwar on 2/26/19.
 //  Copyright © 2019 Sadiq Sarwar. All rights reserved.
 //
 
@@ -22,13 +22,13 @@ using namespace std;
 // declare my message buffer
 struct buf {
     long mtype; // required
-    char greeting[50]; // mesg content
+    char greeting[50]; // msg content
+    int randInt;
 }; buf msg;
 
-void sendMsg(buf msg, int qid, int randInt, int size){
+void sendMsg(buf msg, int qid, int size){
     msg.mtype = 13;
-    cout << "Probe C: " + randInt << endl;
-    strcpy(msg.greeting, "Probe C: " + randInt);
+    strcpy(msg.greeting, "C");
     msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 }
 
@@ -45,16 +45,16 @@ int main() {
     kill_patch(qid, &msg, size, 13);
     
     int loop = 0;
-    srand(time(0));
     
+    srand(time(0));
     while(loop != 1){
-        int randInt = rand();
+        msg.randInt = rand();
         
-        if(randInt % 251 == 0){
-            cout << randInt << " Divisible!" << endl;
-            sendMsg(msg, qid, randInt, size);
+        if(msg.randInt % 251 == 0){
+            sendMsg(msg, qid, size);
         }
     }
     
     exit(0);
 }
+
