@@ -26,13 +26,11 @@ int main()
 	buf msg;
 	int size = sizeof(msg) - sizeof(long);
 
-	msg.mtype = 12;
-    strncpy(msg.greeting, "PIDB", size);
+	msg.mtype = 100;
+    strncpy(msg.greeting, "B", size);
     msg.randInt = getpid();
 	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-    strncpy(msg.greeting, "B", size);
-
-    
+    msg.mtype = 12;
 	while (true)
 	{
 		msg.randInt = rand();
