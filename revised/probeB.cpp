@@ -1,3 +1,11 @@
+// The Probe B program created by Tyler Ton
+// The program is used for Assignment 2 in CECS 326 
+// Spring 2019 - Instructor: Ratana Ngo
+
+/*
+	This program will contain
+*/
+
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
