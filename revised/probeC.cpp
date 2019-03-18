@@ -19,44 +19,67 @@
 using namespace std;
 
 
-// declare my message buffer
+// Declaring Message Buffer
 struct buf {
-    long mtype; // required
-    char greeting[5]; // msg content
-    int randInt;
-};
+    long mtype; // Queue channel to hub
+    char greeting[5]; // Recognition message
+    int randInt; // Randomly generated conditional value
+}; // Block End - Message Buffer Struct
 
+
+// Function designed to send message buffer to the hub
 void sendMsg(buf msg, int qid, int size){
+    
+    // Declaring mtype to be 13
     msg.mtype = 13;
+    
+    // If condition holds true, send message buffer to queue
     msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-}
+    
+} // Block End - sendMsg(...) Function
+
 
 int main() {
-    // create my msgQ with key value from ftok()
+    
+    // Creating queue connection to hub
     int qid = msgget(ftok(".",'u'), 0);
     
+    // Creating local reference to message buffer
     buf msg;
+    
+    // Calculating the size of the message content
     int size = sizeof(msg)-sizeof(long);
     
+    // Declaring mtype to be 13
     msg.mtype = 13;
+    
+    // Assigning termination message
     strncpy(msg.greeting, "EndC", size);
     
+    // Assigning termination when function
     kill_patch(qid, (msgbuf *) &msg, size, 13);
-
+    
+    // Otherwise, assigning probe recognition message for the hub
     strncpy(msg.greeting, "C", size);
     
-    cout << "C_pid: " << getpid() << endl;
-
-    int loop = 0;
-    
+    // Assigning a seed to the random function
     srand(time(0));
-    while(loop != 1){
+    
+    // Infinite looping until program is manually terminated
+    while(true){
+        
+        // Assigning randomly generated integer to message buffer variable
         msg.randInt = rand();
         
+        // Checking condition with regards to divisibility
         if(msg.randInt % 2011 == 0){
+            
+            // If condition holds true, call sendMsg(...) Function
             sendMsg(msg, qid, size);
-        }
-    }
+        
+        } // Block End - if(msg.randInt % 2011 == 0)
+        
+    } // Block End - while(true)
     
     exit(0);
 }
