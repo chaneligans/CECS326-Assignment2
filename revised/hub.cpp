@@ -48,7 +48,7 @@ int main()
    bool endB = false;
    bool endC = false;
 
-   //Message counter
+   //Message counter: counts the message received by Hub
    int counter = 0;
 
    //Gets the pid of B
@@ -58,8 +58,8 @@ int main()
 
    while (endA == false || endB == false || endC == false) // Hub exits when all 3 probes exited
    {
-      msgrcv(qid, (struct msgbuf *)&msg, size, -14, 0);                      // receive message from a probe
-      counter += 1;                                                          // increase message counter
+      msgrcv(qid, (struct msgbuf *)&msg, size, -14, 0); // receive message from a probe
+      counter += 1; // increase message counter
       cout << msg.greeting << ": " << msg.randInt << " " << counter << endl; // Print out the message and random number
 
       //Check if the message from Probe A
@@ -75,7 +75,7 @@ int main()
             continue;
          } // Probe A has been terminated
 
-         // Hub replies probe A
+         // Hub replies probe A before receiving next message
          msg.mtype = 15;
          msg.randInt = 0;
          strncpy(msg.greeting, "Hub replies", size);
@@ -83,7 +83,8 @@ int main()
          msgsnd(qid, (struct msgbuf *)&msg, size, 0);
       }
 
-      // Check if message counter reaches 10000. If yes, force probe B to exit
+      // Check if message counter reaches 10000. 
+      // If yes, force probe B to exit, set endB to true
       if (counter == 10000)
       {
          cout << counter << endl;
@@ -91,7 +92,7 @@ int main()
          endB = true;
       }
 
-      // Check if probe C exited
+      // Check if probe C exited. If yes, set endC to true
       if (strncmp(msg.greeting, "EndC", 4) == 0)
       {
          endC = true;
@@ -101,5 +102,5 @@ int main()
    cout << "Hub is terminating" << endl;
 
    msgctl(qid, IPC_RMID, NULL); // deallocate the queue
-   exit(0);
+   exit(0); 
 }
