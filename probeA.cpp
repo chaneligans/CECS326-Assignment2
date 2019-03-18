@@ -1,6 +1,15 @@
 /* 
+Dinh Luong, Chanel Mendoza, Sadiq Sarwar, Tyler Ton
+March 12, 2019
+CECS 326 - 05 Ratana Ngo
 
-This is a 
+File name: probeA.cpp
+
+Description: This program is one of three probes that sends data to a hub. This probe
+continuously sends randomly generated numbers to the hub. What makes this probe unique
+is that after it sends a message to the hub, it waits for a return message / 
+acknowledgement from the hub before sending another message. Finally, this probe 
+stops sending messages when it produces a random integer that is less than 100.
 
 */
 #include <sys/types.h>
@@ -20,10 +29,10 @@ int main() {
 
     int qid = msgget(ftok(".",'u'), 0);
 
-    // declare my message buffer
+    // declare the message buffer
 	struct buf {
 		long mtype; // required
-		char greeting[5]; // mesg content
+		char greeting[5]; // msg content
         int randInt;
 	};
 
@@ -52,7 +61,7 @@ int main() {
             // send msg
 	        msgsnd(qid, (struct msgbuf *)&msg, size, 0);
             
-            // recieve msg
+            // receive msg
             msgrcv(qid, (struct msgbuf *)&msg, size, 314, 0); // reading
 	        cout << getpid() << ": gets reply" << endl;
 	        cout << "reply: " << msg.greeting << endl;
@@ -62,7 +71,7 @@ int main() {
         randNum = rand();
     }
 
-    //Notify Hub that probe A ending
+    //Notify Hub that probe A is ending
     strncpy(msg.greeting, "EndA",size);
     msgsnd(qid, (struct msgbuf *)&msg, size, 0);
     cout << "Probe A is terminating"<< endl;
