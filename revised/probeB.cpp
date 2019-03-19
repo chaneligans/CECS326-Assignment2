@@ -3,7 +3,14 @@
 // Spring 2019 - Instructor: Ratana Ngo
 
 /*
-	This program will contain
+	Probe B's properties: 
+		beta: 2049 
+		mtype: 100 (for sending its pid), 12 (for sending valid random numbers)
+	
+	This program uses the mtype 100 for sending the message contained its pid to the hub.
+	Then the mtype will be changed to 12 for all the messages that contain the valid random number sending to the hub. 
+	The main function of this program is generating random numbers and sending the messages which contain the numbers divisible by beta to the hub. 
+	The program will be terminated when the hub receives 10000 messages by calling force patch.
 */
 
 #include <sys/types.h>
